@@ -2,11 +2,13 @@
 # encoding: utf=8
 
 """
-capsule.py
+mix_machine.py based on capsule.py
 
 accepts songs on the commandline, order them, beatmatch them, and output an audio file
 
-Created by Tristan Jehan and Jason Sundram.
+Created by Cameron Bracken
+
+Originally created by Tristan Jehan and Jason Sundram.
 """
 
 import os
