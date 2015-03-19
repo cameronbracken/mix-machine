@@ -26,7 +26,7 @@ convert=yes
 
 # Upload the tracks directly to echonest using curl on the command line, 
 # sometimes the python script times out, not sure why 
-upload=yes
+upload=no
 
 outputV0=yes
 

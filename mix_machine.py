@@ -38,7 +38,7 @@ def do_work(audio_files, options):
     if(len(audio_files) < 3):
         raise Exception('Cant make a mix with less than 3 songs.')
 
-    api_key = int(options.apikey)
+    api_key = options.apikey
     xfade = int(options.crossfade)
     fadeonly = bool(options.fadeonly)
     order = bool(options.order)
