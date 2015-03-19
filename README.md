@@ -38,6 +38,7 @@ allow for 320k files.
 putting together the mix. It can be used separately from The Mix Machine
 shell scripts.
 
+```
 Usage: mix_machine.py [options] <list of mp3s>
 
 Options:
@@ -54,6 +55,7 @@ Options:
   -m, --multiprocessing
                         Use the multiprocessing module to run taskes in
                         parallel.
+```
 
 ## Disclaimer
 
