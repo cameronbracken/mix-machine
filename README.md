@@ -55,7 +55,7 @@ Options:
                         Use the multiprocessing module to run taskes in
                         parallel.
 
-## Discalimer
+## Disclaimer
 
 Does The Mix Machine make human DJs obsolete? Heck no! 
 
