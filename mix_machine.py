@@ -90,7 +90,7 @@ def do_work(audio_files, options):
         # 1. it xfades track 1,2 and tracks 2,3
         # 2. plays 2 back
 
-        mix.extend(fade_and_play(t1,t2,t3,xfade))
+        mix.extend(fade_and_play(t1,t2,t3,xfade,fadeonly))
         
     force_fade = check_tempos(t2,t3)
     if fadeonly or force_fade:

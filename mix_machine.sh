@@ -3,7 +3,8 @@
 mp3_dir="tracks"
 fixed_dir="fixed_tracks"
 final_mix="mixed.mp3"
-api_key=$ECHO_NEST_API_KEY
+api_key=${ECHO_NEST_API_KEY}
+echo "Using API Key: $api_key"
 
 ################
 # OPTIONS
@@ -26,7 +27,7 @@ convert=yes
 
 # Upload the tracks directly to echonest using curl on the command line, 
 # sometimes the python script times out, not sure why 
-upload=no
+upload=yes
 
 outputV0=yes
 
@@ -73,7 +74,7 @@ fi
 
 # mix, fade and beatmatch
 export PYTHONDONTWRITEBYTECODE=1
-python mix_machine.py -a $api_key -m -v -e $order_flag -x $transition "${fixed_dir}"/*
+python mix_machine.py -a $api_key -v -e $order_flag -x $transition "${fixed_dir}"/*
 
 # convert to V0
 if [ "$outputV0" = "yes" ]; then
