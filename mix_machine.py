@@ -84,7 +84,7 @@ def do_work(audio_files, options):
     # a triple is centered on track 2 of a triple,
     # the goal is to fade t1 and t2 and playback t2 but 
     # we need to know when the fade starts with t3
-    #   1. it xfades track 1,2 and tracks 2,3
+    #   1. it xfade track 1,2 and tracks 2,3
     #   2. plays 2 back
     for (t1,t2,t3) in tuples(tracks,n=3):
         mix.extend(fade_and_play(t1,t2,t3,xfade,fadeonly))
