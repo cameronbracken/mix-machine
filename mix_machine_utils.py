@@ -72,6 +72,34 @@ def cross_fade_match(t1, t2, xfade, start_beat_t2=2):
     cf = Crossfade([t1, t2], (start_fade_t1, start_fade_t2), xfade)
     return (cf, start_fade_t1, end_fade_t2)
 
+
+def start_mix(t1,t2,xfade,fadeonly):
+    """
+    Returns playback of the first track faded or beatmatched with the second
+    """
+    force_fade = check_tempos(t1,t2)
+    if (fadeonly):
+        (crossfade_t12, end_t1, start_t2) = cross_fade_match(t1,t2, xfade)
+    else:
+        (xmatch_t12, end_t1, start_t2) = beatmatch(t1,t2,xfade)
+    return Playback(t1,0,end_t1)
+
+
+def end_mix(t2,t3,xfade,fadeonly):
+    """
+    Returns playback of last track starting at the end of the last fade
+    """
+    force_fade = check_tempos(t2,t3)
+    if fadeonly or force_fade:
+        (crossfade_t23, end_t2, start_t3) = cross_fade_match(t2,t3, xfade)
+        fade = crossfade_t23
+    else:
+        (beatmatch_t23, end_t2, start_t3) = beatmatch(t2,t3,xfade)
+        fade = beatmatch_t23
+    pb = Playback(t3, start_t3, t3.analysis.duration)
+    return (fade, pb)
+
+
 def fade_and_play(t1,t2,t3,xfade,fadeonly=False):
     """
     Crossmatch or if the tempo difference is too great, Crossfade between 
@@ -151,7 +179,7 @@ def display_tempos(tracks):
     for track in tracks:
         m = track.analysis.metadata
         tempo = track.analysis.tempo
-        print "%5.1f (%d%%)\t %s\t %s" % (tempo['value'],tempo['confidence']*100.0,m['artist'], m['title'])
+        print "%5.1f (%3d%%)\t %s - %s" % (tempo['value'],tempo['confidence']*100.0,m['artist'], m['title'])
     print
 
 def tuples(l, n=2):

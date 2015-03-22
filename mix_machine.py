@@ -79,27 +79,19 @@ def do_work(audio_files, options):
     # first playback the first track to start the mix,
     # cross fade with the second track
     t1,t2 = (tracks[0],tracks[1])
-    if (fadeonly):
-        (crossfade_t12, end_t1, start_t2) = cross_fade_match(t1,t2, xfade)
-    else:
-        (xmatch_t12, end_t1, start_t2) = beatmatch(t1,t2,xfade)
-    mix = [Playback(t1,0,end_t1)]
+    mix = [start_mix(t1,t2,xfade,fadeonly)]
 
+    # a triple is centered on track 2 of a triple,
+    # the goal is to fade t1 and t2 and playback t2 but 
+    # we need to know when the fade starts with t3
+    #   1. it xfades track 1,2 and tracks 2,3
+    #   2. plays 2 back
     for (t1,t2,t3) in tuples(tracks,n=3):
-        # a triple is centered on track 2 of a triple, 
-        # 1. it xfades track 1,2 and tracks 2,3
-        # 2. plays 2 back
-
         mix.extend(fade_and_play(t1,t2,t3,xfade,fadeonly))
+    
+    # last fade and playback
+    mix.extend(end_mix(t2,t3,xfade,fadeonly))
         
-    force_fade = check_tempos(t2,t3)
-    if fadeonly or force_fade:
-        (crossfade_t23, end_t2, start_t3) = cross_fade_match(t2,t3, xfade)
-        mix.append(crossfade_t23)
-    else:
-        (beatmatch_t23, end_t2, start_t3) = beatmatch(t2,t3,xfade)
-        mix.append(beatmatch_t23)
-    mix.append(Playback(t3, start_t3, t3.analysis.duration))
 
     #import pdb; pdb.set_trace()
     #reload(sys)
