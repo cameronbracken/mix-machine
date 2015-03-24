@@ -1,8 +1,8 @@
 #!/bin/bash
 
-mp3_dir="tracks"
+mp3_dir="micrographia"
 fixed_dir="fixed_tracks"
-final_mix="mixed.mp3"
+final_mix="micrographia.mp3"
 api_key=${ECHO_NEST_API_KEY}
 echo "Using API Key: $api_key"
 
@@ -27,7 +27,7 @@ convert=yes
 
 # Upload the tracks directly to echonest using curl on the command line, 
 # sometimes the python script times out, not sure why 
-upload=yes
+upload=no
 
 outputV0=yes
 

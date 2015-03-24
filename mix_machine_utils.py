@@ -4,7 +4,7 @@
 """
 mix_machine_utils.py
 
-Created by Cameron Bracken
+Created by Cameron Bracken 2015
 """
 
 from echonest.remix.action import Crossfade, Playback, Crossmatch, humanize_time
@@ -77,7 +77,7 @@ def start_mix(t1,t2,xfade,fadeonly):
     """
     Returns playback of the first track faded or beatmatched with the second
     """
-    force_fade = check_tempos(t1,t2)
+    mismatch = check_tempo_mismatch(t1,t2)
     if (fadeonly):
         (crossfade_t12, end_t1, start_t2) = cross_fade_match(t1,t2, xfade)
     else:
@@ -89,8 +89,8 @@ def end_mix(t2,t3,xfade,fadeonly):
     """
     Returns playback of last track starting at the end of the last fade
     """
-    force_fade = check_tempos(t2,t3)
-    if fadeonly or force_fade:
+    mismatch = check_tempo_mismatch(t2,t3)
+    if fadeonly or mismatch:
         (crossfade_t23, end_t2, start_t3) = cross_fade_match(t2,t3, xfade)
         fade = crossfade_t23
     else:
@@ -106,9 +106,9 @@ def fade_and_play(t1,t2,t3,xfade,fadeonly=False):
     track 1 and 2, and playback 2, need the track 3 to determine where to 
     stop playing track 2
     """
-    force_fade = check_tempos(t1,t2)
+    mismatch = check_tempo_mismatch(t1,t2)
 
-    if fadeonly or force_fade:
+    if fadeonly or mismatch:
         (crossfade_t12, end_t1, start_t2) = cross_fade_match(t1,t2, xfade)
         (crossfade_t23, end_t2, start_t3) = cross_fade_match(t2,t3, xfade)
         fade = crossfade_t12
@@ -140,17 +140,19 @@ def order_tracks(tracks):
     order = argsort(tempos)
     return [tracks[i] for i in order]
 
-def check_tempos(t1,t2):
+def check_tempo_mismatch(t1,t2):
     """
     Returns True if the percent difference between the two tempos is 
     greater than the threshold, meaning the tempos are different 
     enough that beat matching may sound funny
     """
     tempo1 = t1.analysis.tempo['value']
-    tempo2 = t1.analysis.tempo['value']
+    tempo2 = t2.analysis.tempo['value']
     percent_diff = abs(tempo1 - tempo2)/(tempo1 + tempo2)
 
     if(percent_diff > TEMPO_THRESH):
+        print "Tempo mismatch between %s and %s, not beatmatching." % (
+        t1.analysis.metadata['title'],t2.analysis.metadata['title'])
         return True
     else:
         return False
@@ -162,7 +164,10 @@ def display_songlist(actions):
     for a in actions:
         if "Playback" in unicode(a):
             m = a.track.analysis.metadata
-            print "%s - %s - %s - %s" % (humanize_time(total),m['artist'], m['title'], m['album'])
+            artist = unicode(m['artist'])
+            title = unicode(m['title'])
+            album = unicode(m['album'])
+            print "%8s - %s - %s - %s" % (humanize_time(total),artist, title, album)
         total += a.duration
     print
 
@@ -179,7 +184,9 @@ def display_tempos(tracks):
     for track in tracks:
         m = track.analysis.metadata
         tempo = track.analysis.tempo
-        print "%5.1f (%3d%%)\t %s - %s" % (tempo['value'],tempo['confidence']*100.0,m['artist'], m['title'])
+        title = unicode(m['title'])
+        artist = unicode(m['album'])
+        print "%5.1f (%3d%%)\t %s - %s" % (tempo['value'],tempo['confidence']*100.0, artist, title)
     print
 
 def tuples(l, n=2):

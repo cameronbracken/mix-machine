@@ -95,7 +95,6 @@ def do_work(audio_files, options):
 
     #import pdb; pdb.set_trace()
     #reload(sys)
-    #sys.setdefaultencoding('utf8')
     return mix
 
 def get_options(warn=False):
